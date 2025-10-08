@@ -18,6 +18,19 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ["admin", "promodiser", "agent", "coordinator"],
+    required: true,
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+  deletedAt: { 
+    type: Date, 
+    default: null 
+  },
 });
 
 const User = mongoose.model("User", userSchema);

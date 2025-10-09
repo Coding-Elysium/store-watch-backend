@@ -1,5 +1,10 @@
 import express from "express";
-import { addCategory, deleteCategory, readCategory, updateCategory } from "../controllers/category.controllers.js";
+import {
+  addCategory,
+  deleteCategory,
+  readCategory,
+  updateCategory,
+} from "../controllers/category.controllers.js";
 import protectedRoute from "../middleware/protectedRoute.js";
 
 const router = express.Router();

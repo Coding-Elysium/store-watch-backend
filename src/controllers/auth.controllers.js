@@ -28,17 +28,17 @@ export const login = async (req, res) => {
   }
 };
 
-export const checkAuth = async(req, res) => {
+export const checkAuth = async (req, res) => {
   try {
     const { id } = req.user;
 
-    res.status(200).json({ message: "Successfully logged in", data: id});
+    res.status(200).json({ message: "Successfully logged in", data: id });
   } catch (error) {
-  res
+    res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
-}
+};
 
 export const logout = async (req, res) => {
   try {

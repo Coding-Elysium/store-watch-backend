@@ -1,4 +1,7 @@
-export const paginate = async (model, { filter = {}, page = 1, limit = 10, sort = { createdAt: -1 }, select = "" }) => {
+export const paginate = async (
+  model,
+  { filter = {}, page = 1, limit = 10, sort = { createdAt: -1 }, select = "" }
+) => {
   const pageNum = parseInt(page);
   const limitNum = parseInt(limit);
   const skip = (pageNum - 1) * limitNum;

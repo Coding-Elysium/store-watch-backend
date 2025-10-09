@@ -3,16 +3,16 @@ import mongoose from "mongoose";
 const categorySchema = new mongoose.Schema(
   {
     categoryName: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     isDeleted: {
-        type: Boolean,
-        default: false
-    }
+      type: Boolean,
+      default: false,
+    },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 

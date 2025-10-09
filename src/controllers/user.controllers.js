@@ -8,9 +8,17 @@ import cloudinary from "../config/cloudinary.js";
 
 export const addUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, confirmPassword, role } = req.body;
+    const { firstName, lastName, email, password, confirmPassword, role } =
+      req.body;
 
-    if (!firstName || !lastName || !email || !password || !confirmPassword || !role) {
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !role
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -19,8 +27,10 @@ export const addUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    if(password.length < 6){
-      return res.status(400).json({ message: "Password must be 6 characters and above" });
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be 6 characters and above" });
     }
 
     if (password !== confirmPassword) {
@@ -45,7 +55,7 @@ export const addUser = async (req, res) => {
       password: hashedPassword,
       role,
       profilePicture,
-      profilePublicId
+      profilePublicId,
     });
 
     const { id } = req.user;
@@ -53,10 +63,10 @@ export const addUser = async (req, res) => {
     await ActivityLog.create({
       actor: id,
       activity: "Created User",
-      description: `You have created a new user`
+      description: `You have created a new user`,
     });
 
-    const findAllAdmin = await User.find({role: "admin"});
+    const findAllAdmin = await User.find({ role: "admin" });
 
     const notificationsData = findAllAdmin
       .filter((admin) => admin._id.toString() !== id.toString())
@@ -96,18 +106,18 @@ export const addUser = async (req, res) => {
   }
 };
 
-export const getUsers = async(req, res) => {
+export const getUsers = async (req, res) => {
   try {
     const { role, page = 1, limit = 10 } = req.query;
     const { id } = req.user;
 
-    if(role){
+    if (role) {
       filter.role = role;
     }
 
     const filter = {
       _id: { $ne: id },
-      isDeleted: false, 
+      isDeleted: false,
     };
 
     const result = await paginate(User, {
@@ -119,14 +129,14 @@ export const getUsers = async(req, res) => {
 
     res.status(200).json({
       message: "Successfully fetched users",
-      ...result
+      ...result,
     });
   } catch (error) {
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
-}
+};
 
 export const getUsersById = async (req, res) => {
   try {
@@ -156,10 +166,18 @@ export const updateUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const allowedFields = ["profilePicture", "firstName", "lastName", "email", "role"];
+    const allowedFields = [
+      "profilePicture",
+      "firstName",
+      "lastName",
+      "email",
+      "role",
+    ];
     const requestFields = Object.keys(otherUpdates);
 
-    const invalidFields = requestFields.filter((field) => !allowedFields.includes(field));
+    const invalidFields = requestFields.filter(
+      (field) => !allowedFields.includes(field)
+    );
     if (invalidFields.length > 0) {
       return res.status(400).json({
         message: `Invalid update field(s): ${invalidFields.join(", ")}`,
@@ -187,8 +205,8 @@ export const updateUser = async (req, res) => {
           console.warn("Failed to delete old profile picture:", error.message);
         }
       }
-  
-      user.profilePicture = req.file.path; 
+
+      user.profilePicture = req.file.path;
       user.profilePublicId = req.file.filename || req.file.public_id || null;
     }
 
@@ -247,7 +265,8 @@ export const deleteUser = async (req, res) => {
 
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
-

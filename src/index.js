@@ -20,9 +20,9 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoute);
-app.use("/api/category", categoryRoute)
+app.use("/api/category", categoryRoute);
 
-app.listen(PORT, async() => {
+app.listen(PORT, async () => {
   await connectDB();
   await seedAdmin();
   console.log(`Server is running on port ${PORT}`);

@@ -6,8 +6,6 @@ const createUpload = (folderName) => {
   const storage = new CloudinaryStorage({
     cloudinary,
     params: async (req, file) => {
-      // const userId = req.user ? req.user.id : "unknown_user";
-
       return {
         folder: `${folderName}`,
         allowed_formats: ["jpg", "jpeg", "png", "pdf"],

@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
   profilePicture: {
     type: String,
   },
-  profilePublicId:{
+  profilePublicId: {
     type: String,
   },
   firstName: {
@@ -33,9 +33,9 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  deletedAt: { 
-    type: Date, 
-    default: null 
+  deletedAt: {
+    type: Date,
+    default: null,
   },
 });
 

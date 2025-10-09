@@ -1,5 +1,5 @@
 import { paginate } from "../lib/paginate.js";
-import ActivityLog from "../model/activitylog.mode.js";
+import ActivityLog from "../model/activitylog.model.js";
 import Notification from "../model/notification.model.js";
 import User from "../model/user.model.js";
 import bcrypt from "bcrypt";

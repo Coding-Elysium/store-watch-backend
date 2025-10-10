@@ -5,9 +5,10 @@ export const paginate = async (
   const pageNum = parseInt(page);
   const limitNum = parseInt(limit);
   const skip = (pageNum - 1) * limitNum;
+  const selectedFields = Array.isArray(select) ? select.join(" ") : select;
 
   const [data, total] = await Promise.all([
-    model.find(filter).select(select).sort(sort).skip(skip).limit(limitNum),
+    model.find(filter).select(selectedFields).sort(sort).skip(skip).limit(limitNum),
     model.countDocuments(filter),
   ]);
 

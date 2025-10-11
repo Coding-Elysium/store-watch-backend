@@ -7,8 +7,10 @@ export const addProduct = async (req, res) => {
   try {
     const { productName, skuCode, category, unit, quantityPerBox } = req.body;
 
-    if( !productName || !skuCode || !category || !unit || !quantityPerBox){
-      return res.status(400).json({ message: "All required fields must be provided." });
+    if (!productName || !skuCode || !category || !unit || !quantityPerBox) {
+      return res
+        .status(400)
+        .json({ message: "All required fields must be provided." });
     }
 
     if (skuCode.length < 6) {
@@ -36,12 +38,12 @@ export const addProduct = async (req, res) => {
 
     const newProduct = new Product({
       productImage,
-      productName, 
-      skuCode, 
-      category, 
-      unit, 
+      productName,
+      skuCode,
+      category,
+      unit,
       quantityPerBox,
-      productPublicId
+      productPublicId,
     });
 
     const result = await newProduct.save();
@@ -62,24 +64,26 @@ export const addProduct = async (req, res) => {
   }
 };
 
-export const readProducts = async(req, res) => {
+export const readProducts = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
 
     const result = await paginate(Product, {
-      filter: {isDeleted: false},
+      filter: { isDeleted: false },
       page,
       limit,
-      select: ["-__v", "-productPublicId"]
+      select: ["-__v", "-productPublicId"],
     });
 
-  res.status(200).json({ message: "Successfully read all products", ...result });
+    res
+      .status(200)
+      .json({ message: "Successfully read all products", ...result });
   } catch (error) {
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
-}
+};
 
 export const updateProducts = async (req, res) => {
   try {
@@ -101,15 +105,17 @@ export const updateProducts = async (req, res) => {
 
     const requestFields = Object.keys(otherUpdates);
 
-    const invalidFields = requestFields.filter((field) => !allowedFields.includes(field))
+    const invalidFields = requestFields.filter(
+      (field) => !allowedFields.includes(field)
+    );
     if (invalidFields.length > 0) {
       return res.status(400).json({
         message: `Invalid update field(s): ${invalidFields.join(", ")}`,
       });
     }
 
-    if(removeProductImage === "true" || removeProductImage === true){
-      if(product.productPublicId){
+    if (removeProductImage === "true" || removeProductImage === true) {
+      if (product.productPublicId) {
         try {
           await cloudinary.uploader.destroy(product.productPublicId);
         } catch (error) {
@@ -154,7 +160,6 @@ export const updateProducts = async (req, res) => {
       message: "Product updated successfully.",
       data: product,
     });
-
   } catch (error) {
     console.error("Error updating product:", error);
     res.status(500).json({
@@ -165,3 +170,41 @@ export const updateProducts = async (req, res) => {
   }
 };
 
+export const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await Product.findByAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const result = await product.save();
+
+    const { id: currentUserId } = req.user;
+
+    await ActivityLog.create({
+      actor: currentUserId,
+      activity: "Deleted Product",
+      description: `You just deleted a product`,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully.",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+      error: error.message,
+    });
+  }
+};

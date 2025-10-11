@@ -1,8 +1,24 @@
 import express from "express";
-import { addStore } from "../controllers/store.controllers.js";
+import {
+  addStore,
+  deleteStore,
+  readStores,
+  updateStore,
+} from "../controllers/store.controllers.js";
+import protectedRoute from "../middleware/protectedRoute.js";
+import createUpload from "../middleware/upload.js";
 
 const router = express.Router();
 
-router.post("/add", addStore);
+const upload = createUpload("stores");
+router.post("/add", protectedRoute, upload.single("storeImage"), addStore);
+router.get("/read", protectedRoute, readStores);
+router.patch(
+  "/update/:id",
+  protectedRoute,
+  upload.single("storeImage"),
+  updateStore
+);
+router.delete("/delete/:id", protectedRoute, deleteStore);
 
 export default router;

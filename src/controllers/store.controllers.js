@@ -1,4 +1,5 @@
 import cloudinary from "../config/cloudinary.js";
+import { paginate } from "../lib/paginate.js";
 import ActivityLog from "../model/activitylog.model.js";
 import Store from "../model/store.model.js";
 
@@ -90,7 +91,7 @@ export const readStores = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Stores retrieved successfully",
-      data: result,
+      ...result,
     });
   } catch (error) {
     console.error("Error in getStores controller:", error);

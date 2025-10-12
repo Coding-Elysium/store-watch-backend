@@ -6,6 +6,7 @@ import productRoute from "./routes/product.routes.js";
 import categoryRoute from "./routes/category.routes.js";
 import activityLogRoute from "./routes/activitylog.routes.js";
 import notificationRoute from "./routes/notification.routes.js";
+import scheduleRoute from "./routes/schedule.routes.js";
 import storeRoute from "./routes/store.routes.js";
 import connectDB from "./lib/db.js";
 import cookieParser from "cookie-parser";
@@ -27,6 +28,7 @@ app.use("/api/category", categoryRoute);
 app.use("/api/store", storeRoute);
 app.use("/api/activity-logs", activityLogRoute);
 app.use("/api/notification", notificationRoute);
+app.use("/api/schedule", scheduleRoute);
 
 app.listen(PORT, async () => {
   await connectDB();

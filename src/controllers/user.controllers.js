@@ -102,7 +102,7 @@ export const addUser = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Internal server error", error: error.message });
+      .json({ message: "Internal server errors", error: error.message });
   }
 };
 

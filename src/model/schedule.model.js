@@ -5,7 +5,6 @@ const scheduleSchema = new mongoose.Schema(
     store: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Store",
-      required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

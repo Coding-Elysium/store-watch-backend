@@ -70,7 +70,12 @@ export const getSchedulesByDate = async (req, res) => {
     }
 
     // 🧩 Use your paginate utility instead of find()
-    const { data: schedules, total, totalPages, currentPage } = await paginate(Schedule, {
+    const {
+      data: schedules,
+      total,
+      totalPages,
+      currentPage,
+    } = await paginate(Schedule, {
       filter: query,
       page,
       limit,
@@ -87,8 +92,12 @@ export const getSchedulesByDate = async (req, res) => {
           { path: "store", select: "name storeImage" },
         ]);
 
-        const takenOverStart = sched.takenOverStart ? new Date(sched.takenOverStart) : null;
-        const takenOverUntil = sched.takenOverUntil ? new Date(sched.takenOverUntil) : null;
+        const takenOverStart = sched.takenOverStart
+          ? new Date(sched.takenOverStart)
+          : null;
+        const takenOverUntil = sched.takenOverUntil
+          ? new Date(sched.takenOverUntil)
+          : null;
 
         const isTakenOverActive =
           sched.takenOverBy &&
@@ -171,7 +180,7 @@ export const deleteScheduleUser = async (req, res) => {
   try {
     const { scheduleId } = req.params;
     if (!scheduleId) {
-      return res.status(400).json({ message: "Schedule ID is required" });
+      return res.status(400).json({ message: "ScheduleID is required" });
     }
 
     const scheduleData = await Schedule.findById(scheduleId);
